@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Tuningowy | Bennys</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <style>
         .calculator-container {
             max-width: 1000px;
@@ -34,22 +34,22 @@
             border-bottom: 1px dashed #eee;
         }
 
-        .service-item label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
+        .service-name {
+            flex-grow: 1;
         }
 
         .service-price {
             color: #cc3333;
             font-weight: bold;
+            min-width: 100px;
+            text-align: right;
+            margin-right: 15px;
         }
 
         .quantity-control {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 5px;
         }
 
         .quantity-control button {
@@ -61,14 +61,24 @@
             border: none;
             cursor: pointer;
             font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .quantity-control button:hover {
+            background: #a82a2a;
+            transform: scale(1.1);
         }
 
         .quantity-control input {
-            width: 50px;
+            width: 40px;
             text-align: center;
             padding: 0.3rem;
             border: 1px solid #ddd;
             border-radius: 4px;
+            font-weight: bold;
         }
 
         .summary {
@@ -88,6 +98,7 @@
             font-size: 1.5rem;
             font-weight: bold;
             color: #cc3333;
+            margin-top: 1rem;
         }
 
         #calculateBtn {
@@ -112,13 +123,45 @@
 
         .selected-items {
             margin-top: 1.5rem;
+            max-height: 300px;
+            overflow-y: auto;
         }
 
         .selected-item {
             display: flex;
             justify-content: space-between;
-            padding: 0.5rem 0;
+            padding: 0.7rem 0;
             border-bottom: 1px solid #eee;
+        }
+
+        .item-quantity {
+            color: #cc3333;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .empty-cart {
+            color: #777;
+            font-style: italic;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .service-item {
+                flex-wrap: wrap;
+            }
+            
+            .service-price {
+                text-align: left;
+                margin-right: 0;
+                margin-bottom: 5px;
+                width: 100%;
+            }
+            
+            .quantity-control {
+                margin-left: auto;
+            }
         }
     </style>
 </head>
@@ -147,290 +190,369 @@
             <h1>Kalkulator Tuningowy</h1>
             <p>Wybierz usługi i części, które chcesz zamówić:</p>
 
+            <!-- Naprawy -->
             <div class="service-category">
                 <h2>Naprawy</h2>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="20000">
-                        Pełna naprawa
-                    </label>
+                    <div class="service-name">Pełna naprawa</div>
                     <div class="service-price">20,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="20000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="20000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="15000">
-                        Naprawa silnika
-                    </label>
+                    <div class="service-name">Naprawa silnika</div>
                     <div class="service-price">15,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="15000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="15000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="15000">
-                        Mycie
-                    </label>
+                    <div class="service-name">Mycie</div>
                     <div class="service-price">15,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="15000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="15000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="80000">
-                        Otwarcie zamka
-                    </label>
+                    <div class="service-name">Otwarcie zamka</div>
                     <div class="service-price">80,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="80000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="80000">+</button>
+                    </div>
                 </div>
             </div>
 
+            <!-- Lakierowanie -->
             <div class="service-category">
                 <h2>Lakierowanie</h2>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="15000">
-                        Kolor główny
-                    </label>
+                    <div class="service-name">Kolor główny</div>
                     <div class="service-price">15,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="15000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="15000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="15000">
-                        Kolor dodatkowy
-                    </label>
+                    <div class="service-name">Kolor dodatkowy</div>
                     <div class="service-price">15,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="15000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="15000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="20000">
-                        Kolor wnętrza
-                    </label>
+                    <div class="service-name">Kolor wnętrza</div>
                     <div class="service-price">20,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="20000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="20000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="20000">
-                        Kolor deski
-                    </label>
+                    <div class="service-name">Kolor deski</div>
                     <div class="service-price">20,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="20000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="20000">+</button>
+                    </div>
                 </div>
             </div>
 
+            <!-- Światła -->
             <div class="service-category">
                 <h2>Światła</h2>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="20000">
-                        Reflektory przednie xenony
-                    </label>
+                    <div class="service-name">Reflektory przednie xenony</div>
                     <div class="service-price">20,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="20000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="20000">+</button>
+                    </div>
                 </div>
             </div>
 
+            <!-- Neony -->
             <div class="service-category">
                 <h2>Neony</h2>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Układ lewa strona
-                    </label>
+                    <div class="service-name">Układ lewa strona</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Układ prawa strona
-                    </label>
+                    <div class="service-name">Układ prawa strona</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Układ przód
-                    </label>
+                    <div class="service-name">Układ przód</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Układ tył
-                    </label>
+                    <div class="service-name">Układ tył</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="100000">
-                        Full pakiet
-                    </label>
+                    <div class="service-name">Full pakiet</div>
                     <div class="service-price">100,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="100000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="100000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Kolor neonów
-                    </label>
+                    <div class="service-name">Kolor neonów</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
             </div>
 
+            <!-- Opony -->
             <div class="service-category">
                 <h2>Opony</h2>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="15000">
-                        Zmiana felgi
-                    </label>
+                    <div class="service-name">Zmiana felgi</div>
                     <div class="service-price">15,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="15000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="15000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="15000">
-                        Zmiana koloru felgi
-                    </label>
+                    <div class="service-name">Zmiana koloru felgi</div>
                     <div class="service-price">15,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="15000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="15000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="20000">
-                        Zmiana dymu
-                    </label>
+                    <div class="service-name">Zmiana dymu</div>
                     <div class="service-price">20,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="20000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="20000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="20000">
-                        Opony niestandardowe (napisy)
-                    </label>
+                    <div class="service-name">Opony niestandardowe (napisy)</div>
                     <div class="service-price">20,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="20000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="20000">+</button>
+                    </div>
                 </div>
             </div>
 
+            <!-- Karoseria -->
             <div class="service-category">
                 <h2>Karoseria</h2>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Klapa
-                    </label>
+                    <div class="service-name">Klapa</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Progi
-                    </label>
+                    <div class="service-name">Progi</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Wydech
-                    </label>
+                    <div class="service-name">Wydech</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Front
-                    </label>
+                    <div class="service-name">Front</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Maska
-                    </label>
+                    <div class="service-name">Maska</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Błotniki
-                    </label>
+                    <div class="service-name">Błotniki</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Dach
-                    </label>
+                    <div class="service-name">Dach</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Nadwozie
-                    </label>
+                    <div class="service-name">Nadwozie</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Wnętrze
-                    </label>
+                    <div class="service-name">Wnętrze</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Naklejki
-                    </label>
+                    <div class="service-name">Naklejki</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Zderzaki
-                    </label>
+                    <div class="service-name">Zderzaki</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Extrasy / Malowania (f6)
-                    </label>
+                    <div class="service-name">Extrasy / Malowania (f6)</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
             </div>
 
+            <!-- Inne -->
             <div class="service-category">
                 <h2>Inne</h2>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="20000">
-                        Zmiana koloru szyb
-                    </label>
+                    <div class="service-name">Zmiana koloru szyb</div>
                     <div class="service-price">20,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="20000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="20000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="20000">
-                        Zmiana koloru tablic
-                    </label>
+                    <div class="service-name">Zmiana koloru tablic</div>
                     <div class="service-price">20,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="20000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="20000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="25000">
-                        Ramka tablic
-                    </label>
+                    <div class="service-name">Ramka tablic</div>
                     <div class="service-price">25,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="25000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="25000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="15000">
-                        Zmiana klaksonu
-                    </label>
+                    <div class="service-name">Zmiana klaksonu</div>
                     <div class="service-price">15,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="15000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="15000">+</button>
+                    </div>
                 </div>
                 <div class="service-item">
-                    <label>
-                        <input type="checkbox" class="service-checkbox" data-price="100000">
-                        Pneumatyka
-                    </label>
+                    <div class="service-name">Pneumatyka</div>
                     <div class="service-price">100,000$</div>
+                    <div class="quantity-control">
+                        <button class="minus-btn" data-price="100000">-</button>
+                        <input type="number" class="quantity-input" value="0" min="0">
+                        <button class="plus-btn" data-price="100000">+</button>
+                    </div>
                 </div>
             </div>
 
             <div class="summary">
                 <h3>Podsumowanie zamówienia</h3>
                 <div class="selected-items" id="selectedItems">
-                    <!-- Tutaj będą dodawane wybrane elementy -->
+                    <div class="empty-cart">Dodaj usługi korzystając z przycisków +/-</div>
                 </div>
                 <div class="total-price">Razem: <span id="totalPrice">0</span>$</div>
                 <button id="calculateBtn">Oblicz koszt</button>
@@ -444,45 +566,115 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const checkboxes = document.querySelectorAll('.service-checkbox');
+            const plusButtons = document.querySelectorAll('.plus-btn');
+            const minusButtons = document.querySelectorAll('.minus-btn');
+            const quantityInputs = document.querySelectorAll('.quantity-input');
             const selectedItemsContainer = document.getElementById('selectedItems');
             const totalPriceElement = document.getElementById('totalPrice');
             const calculateBtn = document.getElementById('calculateBtn');
+            const emptyCartMessage = document.querySelector('.empty-cart');
 
-            function updateSummary() {
-                let total = 0;
-                selectedItemsContainer.innerHTML = '';
+            let cart = [];
 
-                checkboxes.forEach(checkbox => {
-                    if (checkbox.checked) {
-                        const serviceName = checkbox.parentElement.textContent.trim();
-                        const servicePrice = parseInt(checkbox.dataset.price);
-                        total += servicePrice;
-
-                        const itemElement = document.createElement('div');
-                        itemElement.className = 'selected-item';
-                        itemElement.innerHTML = `
-                            <span>${serviceName}</span>
-                            <span>${servicePrice.toLocaleString()}$</span>
-                        `;
-                        selectedItemsContainer.appendChild(itemElement);
+            function updateCart() {
+                // Clear the cart
+                cart = [];
+                
+                // Rebuild the cart from inputs
+                quantityInputs.forEach(input => {
+                    const quantity = parseInt(input.value);
+                    if (quantity > 0) {
+                        const serviceItem = input.closest('.service-item');
+                        const serviceName = serviceItem.querySelector('.service-name').textContent.trim();
+                        const servicePrice = parseInt(input.nextElementSibling.dataset.price);
+                        
+                        cart.push({
+                            name: serviceName,
+                            price: servicePrice,
+                            quantity: quantity
+                        });
                     }
                 });
 
+                updateCartDisplay();
+            }
+
+            function updateCartDisplay() {
+                selectedItemsContainer.innerHTML = '';
+                
+                if (cart.length === 0) {
+                    emptyCartMessage.style.display = 'block';
+                    totalPriceElement.textContent = '0';
+                    return;
+                }
+                
+                emptyCartMessage.style.display = 'none';
+                
+                let total = 0;
+                
+                cart.forEach(item => {
+                    total += item.price * item.quantity;
+                    
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'selected-item';
+                    itemElement.innerHTML = `
+                        <div>
+                            <span class="item-quantity">${item.quantity}x</span>
+                            <span>${item.name}</span>
+                        </div>
+                        <span>${(item.price * item.quantity).toLocaleString()}$</span>
+                    `;
+                    selectedItemsContainer.appendChild(itemElement);
+                });
+                
                 totalPriceElement.textContent = total.toLocaleString();
             }
 
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', updateSummary);
+            // Event listeners for plus buttons
+            plusButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.previousElementSibling;
+                    input.value = parseInt(input.value) + 1;
+                    updateCart();
+                });
             });
 
+            // Event listeners for minus buttons
+            minusButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.nextElementSibling;
+                    if (parseInt(input.value) > 0) {
+                        input.value = parseInt(input.value) - 1;
+                        updateCart();
+                    }
+                });
+            });
+
+            // Event listeners for direct input changes
+            quantityInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    if (parseInt(this.value) < 0) this.value = 0;
+                    updateCart();
+                });
+            });
+
+            // Calculate button
             calculateBtn.addEventListener('click', function() {
-                const total = parseInt(totalPriceElement.textContent.replace(/,/g, ''));
-                if (total > 0) {
-                    alert(`Całkowity koszt usług: ${total.toLocaleString()}$\n\nDziękujemy za skorzystanie z usług Bennys!`);
-                } else {
+                if (cart.length === 0) {
                     alert('Proszę wybrać przynajmniej jedną usługę.');
+                    return;
                 }
+                
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                
+                let message = 'Twoje zamówienie:\n\n';
+                cart.forEach(item => {
+                    message += `${item.quantity}x ${item.name} - ${(item.price * item.quantity).toLocaleString()}$\n`;
+                });
+                
+                message += `\nCałkowity koszt: ${total.toLocaleString()}$\n\nDziękujemy za skorzystanie z usług Bennys!`;
+                
+                alert(message);
             });
         });
     </script>
